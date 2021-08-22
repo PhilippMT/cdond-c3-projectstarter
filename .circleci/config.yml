@@ -187,12 +187,9 @@ jobs:
       - run:
           name: Configure server
           command: |
+            mkdir -p .circleci/ansible/roles/configure-server/files/
             tar -zcvf .circleci/ansible/roles/configure-server/files/backend.tar.gz backend/
             ansible-playbook .circleci/ansible/configure-server.yml -i .circleci/ansible/inventory.txt
-      - destroy-environment:
-          stack-name: udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}
-      - destroy-environment:
-          stack-name: udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}    
 
   run-migrations:
     docker:
