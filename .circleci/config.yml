@@ -44,8 +44,8 @@ jobs:
           name: Build front-end
           command: |
             cd frontend
-            npm i
-            npm run build
+            #npm i
+            #npm run build
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
@@ -61,8 +61,8 @@ jobs:
           name: Back-end build
           command: |
             cd backend
-            npm i
-            npm run build
+            #npm i
+            #npm run build
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
@@ -80,8 +80,8 @@ jobs:
             NODE_OPTIONS: --max-old-space-size=8192
           command: |
             cd frontend
-            npm i
-            npm run test
+            #npm i
+            #npm run test
                 
   test-backend:
     docker:
@@ -96,8 +96,8 @@ jobs:
             NODE_OPTIONS: --max-old-space-size=8192
           command: |
             cd backend
-            npm i
-            npm run test
+            #npm i
+            #npm run test
             
   scan-frontend:
     docker:
@@ -110,8 +110,8 @@ jobs:
           name: Front-end scan
           command: |
             cd frontend
-            npm i
-            npm audit fix --audit-level=critical --force
+            #npm i
+            #npm audit fix --audit-level=critical --force
 
   scan-backend:
     docker:
@@ -124,8 +124,8 @@ jobs:
           name: Back-end scan
           command: |
             cd backend
-            npm i
-            npm audit fix --audit-level=critical --force
+            #npm i
+            #npm audit fix --audit-level=critical --force
 
   deploy-infrastructure:
     docker:
