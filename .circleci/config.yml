@@ -76,6 +76,8 @@ jobs:
           keys: [frontend-build]
       - run:
           name: Front-end tests
+          environment:
+            NODE_OPTIONS: --max-old-space-size=8192
           command: |
             cd frontend
             npm i
@@ -90,6 +92,8 @@ jobs:
           keys: [backend-build]
       - run:
           name: Back-end tests
+          environment:
+            NODE_OPTIONS: --max-old-space-size=8192
           command: |
             cd backend
             npm i
@@ -107,7 +111,7 @@ jobs:
           command: |
             cd frontend
             npm i
-            npm audit --audit-level=critical
+            npm audit fix --audit-level=critical --force
 
   scan-backend:
     docker:
@@ -121,7 +125,7 @@ jobs:
           command: |
             cd backend
             npm i
-            npm audit --audit-level=critical
+            npm audit fix --audit-level=critical --force
 
   deploy-infrastructure:
     docker:
