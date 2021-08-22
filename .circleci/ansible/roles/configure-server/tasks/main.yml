@@ -20,19 +20,5 @@
 
 - name: "Copy and unpack backend"
   unarchive:
-    src: "files/backend.tar.gz"
+    src: "files/backend-dist.tar.gz"
     dest: "."
-
-- name: Install packages for backend
-  npm:
-    path: ~/backend
-
-- name: Build backend
-  command: npm run build
-  args:
-    chdir: ~/backend
-
-- name: Executing backend
-  shell: |
-    pm2 start ~/backend/dist/main.js
-  environment: "{{ deployment_vars }}"

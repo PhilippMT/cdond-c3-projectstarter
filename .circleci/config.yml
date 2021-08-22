@@ -188,7 +188,7 @@ jobs:
           name: Configure server
           command: |
             mkdir -p .circleci/ansible/roles/configure-server/files/
-            tar -zcvf .circleci/ansible/roles/configure-server/files/backend.tar.gz backend/
+            tar -zcvf .circleci/ansible/roles/configure-server/files/backend-dist.tar.gz backend/dist
             ansible-playbook .circleci/ansible/configure-server.yml -i .circleci/ansible/inventory.txt
 
   run-migrations:
@@ -199,13 +199,13 @@ jobs:
       - run:
           name: Run migrations
           command: |
-            # Your code here
-            exit 1
+            cd backend
+            npm run migrations
       - run:
           name: Send migration results to memstash
           command: |
             # Your code here
-            exit 1
+            exit 0
      # Here's where you will add some code to rollback on failure      
 
   deploy-frontend:
@@ -231,20 +231,22 @@ jobs:
                     
   deploy-backend:
     docker:
-      # Replace with ansible!!!
-      - image: amazon/aws-cli:2.2.31 # Docker image here that supports Ansible
+      - image: alpine:latest
     steps:
       - checkout
-      # Add ssh keys with fingerprint
-      # attach workspace
+      - add_ssh_keys:
+          fingerprints:
+            - ad:f8:a2:8d:ca:34:ed:e1:fa:fb:61:2a:79:71:b6:2c
+      - attach_workspace:
+          at: ~/
       - run:
           name: Install dependencies
           command: |
-            # your code here
+            apk add ansible
       - run:
           name: Deploy backend
           command: |
-            # your code here
+            ansible-playbook .circleci/ansible/deploy-backend.yml -i .circleci/ansible/inventory.txt
       # Here's where you will add some code to rollback on failure  
 
   smoke-test:

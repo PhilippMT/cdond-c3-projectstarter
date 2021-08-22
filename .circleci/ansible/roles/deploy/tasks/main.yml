@@ -1,0 +1,4 @@
+- name: Executing backend
+  shell: |
+    pm2 start ~/dist/main.js
+  environment: "{{ deployment_vars }}"
