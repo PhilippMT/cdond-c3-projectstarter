@@ -123,7 +123,7 @@ jobs:
     docker:
       - image: amazon/aws-cli:2.2.31
     steps:
-      # Checkout code from git
+      - checkout
       - run:
           name: Ensure back-end infrastructure exists
           command: |
@@ -155,9 +155,10 @@ jobs:
 
   configure-infrastructure:
     docker:
-      # Docker image here that supports Ansible
+      # Replace with ansible!!!
+      - image: amazon/aws-cli:2.2.31 # Docker image here that supports Ansible
     steps:
-      # Checkout code from git
+      - checkout
       # Add ssh keys with fingerprint
       # attach workspace
       - run:
@@ -176,7 +177,7 @@ jobs:
     docker:
       - image: circleci/node:13.8.0
     steps:
-      # Checkout code from git
+      - checkout
       - run:
           name: Run migrations
           command: |
@@ -193,7 +194,7 @@ jobs:
     docker:
       - image: amazon/aws-cli:2.2.31
     steps:
-      # Checkout code from git
+      - checkout
       - run:
           name: Install dependencies
           command: |
@@ -212,9 +213,10 @@ jobs:
                     
   deploy-backend:
     docker:
-      # Docker image here that supports Ansible
+      # Replace with ansible!!!
+      - image: amazon/aws-cli:2.2.31 # Docker image here that supports Ansible
     steps:
-      # Checkout code from git
+      - checkout
       # Add ssh keys with fingerprint
       # attach workspace
       - run:
@@ -229,9 +231,10 @@ jobs:
 
   smoke-test:
     docker:
-      # Lightweight Docker image 
+      # Replace with lightwidht!!!
+      - image: amazon/aws-cli:2.2.31 # Docker image here is lightwidht
     steps:
-      # Checkout code from git
+      - checkout
       - run:
           name: Install dependencies
           command: |
@@ -267,7 +270,8 @@ jobs:
 
 cleanup:
     docker:
-      # Docker image here
+      # Replace with lightwidht!!!
+      - image: amazon/aws-cli:2.2.31 # Docker image here is lightwidht
     steps:
       # Checkout code from git
       - run:
