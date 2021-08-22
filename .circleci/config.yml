@@ -198,17 +198,36 @@ jobs:
             mkdir -p .circleci/ansible/roles/configure-server/files/
             tar -zcvf .circleci/ansible/roles/configure-server/files/backend-dist.tar.gz backend/dist
             ansible-playbook .circleci/ansible/configure-server.yml -i .circleci/ansible/inventory.txt
+            echo ENVIROMENT=production > "backend/.env"
+            echo TYPEORM_CONNECTION=postgres >> "backend/.env"
+            echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> "backend/.env"
+            echo TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts >> "backend/.env"
+            echo TYPEORM_MIGRATIONS=./src/migrations/*.ts >> "backend/.env"
+            echo TYPEORM_HOST=${TYPEORM_HOST} >> backend/.env
+            echo TYPEORM_PORT=${TYPEORM_PORT} >> backend/.env
+            echo TYPEORM_USERNAME=${TYPEORM_USERNAME} >> backend/.env
+            echo TYPEORM_PASSWORD=${TYPEORM_PASSWORD} >> backend/.env
+            echo TYPEORM_DATABASE=${TYPEORM_DATABASE} >> backend/.env
+            cat backend/.env
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project/backend/.env
 
   run-migrations:
     docker:
       - image: circleci/node:14.17.5
     steps:
       - checkout
+      - attach_workspace:
+          at: ~/
       - run:
           name: Run migrations
           command: |
+            cat backend/.env
             cd backend
             npm i
+            npm run build
             npm run migrations
       - run:
           name: Send migration results to memstash
