@@ -44,6 +44,7 @@ jobs:
           name: Build front-end
           command: |
             cd frontend
+            npm run lint
             npm run build
       - save_cache:
           paths: [frontend/node_modules]
@@ -60,6 +61,7 @@ jobs:
           name: Back-end build
           command: |
             cd backend
+            npm run lint
             npm run build
       - save_cache:
           paths: [backend/node_modules]
@@ -67,39 +69,59 @@ jobs:
 
   test-frontend:
     docker:
-      # Docker image here
+      - image: circleci/node:13.8.0
     steps:
-      # Checkout code from git
-      # Restore from cache
-      # Your job code here
+      - checkout
+      - restore_cache:
+          keys: [frontend-build]
+      - run:
+          name: Front-end tests
+          command: |
+            cd frontend
+            npm run test
                 
   test-backend:
     docker:
-      # Docker image here
+      - image: circleci/node:13.8.0
     steps:
-      # Checkout code from git
-      # Restore from cache
-      # Your job code here
+      - checkout
+      - restore_cache:
+          keys: [backend-build]
+      - run:
+          name: Back-end tests
+          command: |
+            cd backend
+            npm run test
             
   scan-frontend:
     docker:
-      # Docker image here
+      - image: circleci/node:13.8.0
     steps:
-      # Checkout code from git
-      # Restore from cache
-      # Your job code here
+      - checkout
+      - restore_cache:
+          keys: [frontend-build]
+      - run:
+          name: Front-end scan
+          command: |
+            cd frontend
+            npm audit --audit-level=critical
 
   scan-backend:
     docker:
-      # Docker image here
+      - image: circleci/node:13.8.0
     steps:
-      # Checkout code from git
-      # Restore from cache
-      # Your job code here
+      - checkout
+      - restore_cache:
+          keys: [backend-build]
+      - run:
+          name: Back-end scan
+          command: |
+            cd backend
+            npm audit --audit-level=critical
 
   deploy-infrastructure:
     docker:
-      # Docker image here that supports AWS CLI
+      - image: amazon/aws-cli:2.2.31
     steps:
       # Checkout code from git
       - run:
@@ -152,7 +174,7 @@ jobs:
 
   run-migrations:
     docker:
-      # Docker image here that supports NodeJS
+      - image: circleci/node:13.8.0
     steps:
       # Checkout code from git
       - run:
@@ -169,7 +191,7 @@ jobs:
 
   deploy-frontend:
     docker:
-      # Docker image here that supports AWS CLI
+      - image: amazon/aws-cli:2.2.31
     steps:
       # Checkout code from git
       - run:
@@ -230,7 +252,7 @@ jobs:
 
   cloudfront-update:
     docker:
-      # Docker image here that supports AWS CLI
+      - image: amazon/aws-cli:2.2.31
     steps:
       # Checkout code from git
       - run:
