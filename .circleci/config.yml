@@ -172,17 +172,24 @@ jobs:
 
   configure-infrastructure:
     docker:
-      # Replace with ansible!!!
-      - image: amazon/aws-cli:2.2.31 # Docker image here that supports Ansible
+      - image: alpine:latest
     steps:
       - checkout
-      # Add ssh keys with fingerprint
-      # attach workspace
+      - add_ssh_keys:
+          fingerprints:
+            - ad:f8:a2:8d:ca:34:ed:e1:fa:fb:61:2a:79:71:b6:2c
+      - run:
+          name: TTT
+          command: |
+            find . -name "inventory.txt"
+      - attach_workspace:
+          at: ~/
       - run:
           name: Install dependencies
           command: |
-            # Your code here
-            exit 1
+            find . -name "inventory.txt"
+            cat ./.circleci/ansible/inventory.txt
+            apk add ansible
       - run:
           name: Configure server
           command: |
