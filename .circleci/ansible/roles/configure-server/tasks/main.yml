@@ -14,12 +14,24 @@
   become: yes
   npm:
     name: pm2
-    state: latest
+    production: yes
+    state: present
     global: yes
 
-- name: "Test"
-  shell: printenv
-  environment: "{{ deployment_vars }}"
-  register: out
+- name: "Copy and unpack backend"
+  unarchive:
+    src: "files/backend.tar.gz"
+    dest: "."
 
-- debug: var=out.stdout_lines
+- name: Install packages for backend
+  npm:
+    path: ~/backend
+
+- name: Build backend
+  command: npm run build
+  args:
+    chdir: ~/backend
+
+- name: Executing backend
+  shell: |
+    pm2 start ~/backend/dist/main.js
