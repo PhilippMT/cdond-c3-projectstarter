@@ -16,3 +16,10 @@
     name: pm2
     state: latest
     global: yes
+
+- name: "Test"
+  shell: printenv
+  environment: "{{ deployment_vars }}"
+  register: out
+
+- debug: var=out.stdout_lines
