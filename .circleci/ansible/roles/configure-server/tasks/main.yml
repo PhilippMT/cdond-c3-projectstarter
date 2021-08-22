@@ -17,8 +17,3 @@
     production: yes
     state: present
     global: yes
-
-- name: "Copy and unpack backend"
-  unarchive:
-    src: "files/backend-dist.tar.gz"
-    dest: "."

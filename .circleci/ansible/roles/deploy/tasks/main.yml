@@ -1,4 +1,11 @@
+- name: "Copy and unpack backend"
+  unarchive:
+    src: "files/backend.tar.gz"
+    dest: "."
+
 - name: Executing backend
   shell: |
-    pm2 start ~/backend/dist/main.js
+    pm2 start npm --name backend -- start
   environment: "{{ deployment_vars }}"
+  args:
+    chdir: ~/backend
