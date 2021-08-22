@@ -3,6 +3,12 @@
     src: "files/backend.tar.gz"
     dest: "."
 
+- name: Installing backend
+  shell: |
+    npm i
+  args:
+    chdir: ~/backend
+
 - name: Executing backend
   shell: |
     pm2 start npm --name backend -- start
