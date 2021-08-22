@@ -178,23 +178,20 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - ad:f8:a2:8d:ca:34:ed:e1:fa:fb:61:2a:79:71:b6:2c
-      - run:
-          name: TTT
-          command: |
-            find . -name "inventory.txt"
       - attach_workspace:
           at: ~/
       - run:
           name: Install dependencies
           command: |
-            find . -name "inventory.txt"
-            cat ./.circleci/ansible/inventory.txt
             apk add ansible
       - run:
           name: Configure server
           command: |
-            ansible-playbook .circleci/ansible/configure-server.yml
-      # Here's where you will add some code to rollback on failure      
+            ansible-playbook .circleci/ansible/configure-server.yml -i .circleci/ansible/inventory.txt
+      - destroy-environment:
+          stack-name: udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}
+      - destroy-environment:
+          stack-name: udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}    
 
   run-migrations:
     docker:
