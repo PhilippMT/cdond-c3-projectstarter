@@ -276,8 +276,8 @@ jobs:
       - run:
           name: Deploy backend
           command: |
-            mkdir -p .circleci/ansible/roles/configure-server/files/
-            tar -zcvf .circleci/ansible/roles/configure-server/files/backend.tar.gz backend
+            mkdir -p .circleci/ansible/roles/deploy/files/
+            tar -zcvf .circleci/ansible/roles/deploy/files/backend.tar.gz backend
             ansible-playbook .circleci/ansible/deploy-backend.yml -i .circleci/ansible/inventory.txt
       # Here's where you will add some code to rollback on failure  
 
