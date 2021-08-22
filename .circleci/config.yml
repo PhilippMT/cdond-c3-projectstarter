@@ -268,7 +268,7 @@ jobs:
             # your code here
       # Here's where you will add some code to rollback on failure  
 
-cleanup:
+  cleanup:
     docker:
       # Replace with lightwidht!!!
       - image: amazon/aws-cli:2.2.31 # Docker image here is lightwidht
