@@ -9,9 +9,9 @@
   args:
     chdir: ~/backend
 
-- name: Executing backend
-  shell: |
-    pm2 start npm --name backend -- start
-  environment: "{{ deployment_vars }}"
+- name: "run server"
+  become: true
+  command: pm2 start -f ./main.js
   args:
-    chdir: ~/backend
+    chdir: ./backend/dist
+  environment: "{{ deployment_vars }}"
