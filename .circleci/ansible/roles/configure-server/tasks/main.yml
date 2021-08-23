@@ -1,4 +1,4 @@
-- name: "Install nodejs"
+- name: "Install nodejs repository"
   become: yes
   shell: curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
   args:
