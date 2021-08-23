@@ -236,7 +236,7 @@ jobs:
           command: |
             ls
             echo "https://api.memstash.io/values/migrations-result-${CIRCLE_WORKFLOW_ID:0:7}"
-            if grep -q "has been done successfully" result.log 
+            if grep -q "has been done successfully" backend/result.log 
             then 
               curl -H "Content-Type: text/plain" -H "token: a3529b17-9885-4e2b-b987-557f7a82dfbe" --request PUT --data "1" "https://api.memstash.io/values/migrations-result-${CIRCLE_WORKFLOW_ID:0:7}"
             else
