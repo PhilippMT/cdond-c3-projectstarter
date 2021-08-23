@@ -24,7 +24,7 @@ commands:
           name: Revert migrations
           when: on_fail
           command: |
-            STATUS=$(curl -H "token: a3529b17-9885-4e2b-b987-557f7a82dfbe" --request GET https://api.memstash.io/values/migrations-result)
+            STATUS=$(curl -H "token: a3529b17-9885-4e2b-b987-557f7a82dfbe" --request GET https://api.memstash.io/values/migrations-result-${CIRCLE_WORKFLOW_ID:0:7})
             echo $STATUS
             SUCCESS = 1
             if [[ "$STATUS" == "0" ]]
@@ -228,38 +228,46 @@ jobs:
             cd backend
             npm i
             npm run build
-            npm run migrations
-            echo "has been done successfully" > result.txt
+            npm run migrations | tee result.log
       - run:
           name: Send migration results to memstash
           when: always
           command: |
-            if grep -q "has been done successfully" result.txt 
+            if grep -q "has been done successfully" result.log 
             then 
-              curl -H "Content-Type: text/plain" -H "token: a3529b17-9885-4e2b-b987-557f7a82dfbe" --request PUT --data "1" https://api.memstash.io/values/migrations-result
+              curl -H "Content-Type: text/plain" -H "token: a3529b17-9885-4e2b-b987-557f7a82dfbe" --request PUT --data "1" "https://api.memstash.io/values/migrations-result-${CIRCLE_WORKFLOW_ID:0:7}"
             else
-              curl -H "Content-Type: text/plain" -H "token: a3529b17-9885-4e2b-b987-557f7a82dfbe" --request PUT --data "0" https://api.memstash.io/values/migrations-result
+              curl -H "Content-Type: text/plain" -H "token: a3529b17-9885-4e2b-b987-557f7a82dfbe" --request PUT --data "0" "https://api.memstash.io/values/migrations-result-${CIRCLE_WORKFLOW_ID:0:7}"
             fi    
 
   deploy-frontend:
     docker:
-      - image: amazon/aws-cli:2.2.31
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - run:
           name: Install dependencies
           command: |
-            # your code here
+            yum install -y tar gzip
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+      - attach_workspace:
+          at: ~/
       - run:
           name: Get backend url
           command: |
-            # your code here
+            BACKEND_IP=$(<./.circleci/backendIP.txt)
+            echo "$BACKEND_IP"
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
       - run:
           name: Deploy frontend objects
           command: |
-            # your code here
+            cd frontend
+            npm i
+            npm run build
+            aws s3 cp ./dist "s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}" --recursive
       # Here's where you will add some code to rollback on failure      
                     
   deploy-backend:
