@@ -4,11 +4,10 @@
   args:
     warn: no
 
-- name: "install dependencies."
-  become: true
+- name: "Install nodejs"
+  become: yes
   apt:
-    name: ["nodejs", "npm"]
-    state: latest
+    name: nodejs
     update_cache: yes
     
 - name: "install n"

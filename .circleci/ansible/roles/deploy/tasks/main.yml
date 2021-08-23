@@ -3,12 +3,6 @@
     src: "files/backend.tar.gz"
     dest: "."
 
-- name: Installing backend
-  shell: |
-    npm i
-  args:
-    chdir: ~/backend
-
 - name: "run server"
   become: true
   command: pm2 start -f ./main.js
