@@ -301,26 +301,27 @@ jobs:
 
   smoke-test:
     docker:
-      # Replace with lightwidht!!!
-      - image: amazon/aws-cli:2.2.31 # Docker image here is lightwidht
+      - image: amazon/aws-cli:2.2.31
     steps:
       - checkout
-      - run:
-          name: Install dependencies
-          command: |
-            # your code here
-      - run:
-          name: Get backend url
-          command: |
-            # your code here
+      - attach_workspace:
+          at: ~/
       - run:
           name: Backend smoke test.
           command: |
-            # your code here
+            BACKEND_IP=$(<./.circleci/backendIP.txt)
+            echo "$BACKEND_IP"
+            curl "http://$BACKEND_IP:3030/api/status"
       - run:
           name: Frontend smoke test.
           command: |
-            # your code here
+            URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-eu-central-1.amazonaws.com"
+            if curl -s ${URL} | grep "Welcome"
+            then
+              return 1
+            else
+              return 0
+            fi
       # Here's where you will add some code to rollback on failure  
 
   cloudfront-update:
