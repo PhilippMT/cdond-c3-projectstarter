@@ -25,7 +25,7 @@ commands:
           command: |
             STATUS=$(curl -H "token: a3529b17-9885-4e2b-b987-557f7a82dfbe" --request GET https://api.memstash.io/values/migrations-result-${CIRCLE_WORKFLOW_ID:0:7})
             echo $STATUS
-            if [[ "$STATUS" == "0" ]]
+            if [[ "$STATUS" == "1" ]]
             then
               cd backend
               npm run migrations:revert
@@ -237,7 +237,7 @@ jobs:
             cat backend/result.log
             echo "--------------------------------------------------------"
             echo "https://api.memstash.io/values/migrations-result-${CIRCLE_WORKFLOW_ID:0:7}"
-            if grep -q "has been done successfully" backend/result.log
+            if grep -q "has been executed successfully" backend/result.log
             then 
               curl -H "Content-Type: text/plain" -H "token: a3529b17-9885-4e2b-b987-557f7a82dfbe" --request PUT --data "1" "https://api.memstash.io/values/migrations-result-${CIRCLE_WORKFLOW_ID:0:7}"
             else
