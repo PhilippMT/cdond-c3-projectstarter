@@ -12,6 +12,7 @@ commands:
           name: Destroy environments
           when: on_fail
           command: |
+            aws s3 rm s3://udapeople-<<parameters.id>> --recursive
             aws cloudformation delete-stack --stack-name udapeople-backend-<<parameters.id>>
             aws cloudformation delete-stack --stack-name udapeople-frontend-<<parameters.id>>
 
@@ -24,7 +25,6 @@ commands:
           command: |
             STATUS=$(curl -H "token: a3529b17-9885-4e2b-b987-557f7a82dfbe" --request GET https://api.memstash.io/values/migrations-result-${CIRCLE_WORKFLOW_ID:0:7})
             echo $STATUS
-            SUCCESS = 1
             if [[ "$STATUS" == "0" ]]
             then
               cd backend
@@ -232,9 +232,12 @@ jobs:
           name: Send migration results to memstash
           when: always
           command: |
-            ls
+            ls backend/
+            echo "--------------------------------------------------------"
+            cat backend/result.log
+            echo "--------------------------------------------------------"
             echo "https://api.memstash.io/values/migrations-result-${CIRCLE_WORKFLOW_ID:0:7}"
-            if grep -q "has been done successfully" backend/result.log 
+            if grep -q "has been done successfully" backend/result.log
             then 
               curl -H "Content-Type: text/plain" -H "token: a3529b17-9885-4e2b-b987-557f7a82dfbe" --request PUT --data "1" "https://api.memstash.io/values/migrations-result-${CIRCLE_WORKFLOW_ID:0:7}"
             else
