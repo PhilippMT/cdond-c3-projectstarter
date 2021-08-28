@@ -326,10 +326,8 @@ jobs:
             else
               return 0
             fi
-      - revert-migrations:
-          when: on_fail
-      - destroy-environment:
-          when: on_fail
+      - revert-migrations
+      - destroy-environment
 
   cloudfront-update:
     docker:
