@@ -30,4 +30,5 @@
         name: python3
 
   roles:
+    - configure-prometheus-node-exporter
     - configure-server
