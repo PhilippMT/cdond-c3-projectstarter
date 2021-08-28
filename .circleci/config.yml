@@ -356,7 +356,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Get old stack workflow id
+          name: Remove old stacks and files
           command: |
             export OldWorkflowID=$(curl -H "token: a3529b17-9885-4e2b-b987-557f7a82dfbe" --request GET https://api.memstash.io/values/workflowid)
 
@@ -365,11 +365,6 @@ jobs:
               --stack-status-filter CREATE_COMPLETE \
               --no-paginate --output text)
             
-            echo "Old WorkflowID is: $OldWorkflowID"
-            echo "STACKS is: $STACKS"
-      - run:
-          name: Remove old stacks and files
-          command: |
             echo "Old WorkflowID is: $OldWorkflowID"
             echo "STACKS is: $STACKS"
 
