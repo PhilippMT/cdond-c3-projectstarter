@@ -326,7 +326,7 @@ jobs:
             else
               return 0
             fi
-      - revert_migrations:
+      - revert-migrations:
           when: on_fail
       - destroy-environment:
           when: on_fail
