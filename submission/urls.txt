@@ -1,0 +1,5 @@
+[URL01] https://github.com/PhilippMT/cdond-c3-projectstarter
+[URL02] http://udapeople-1454651.s3-website.eu-central-1.amazonaws.com/
+[URL03] http://d2rwao4taerjj0.cloudfront.net
+[URL04] http://3.68.232.88:3030
+[URL05] http://3.69.208.189:9090/
